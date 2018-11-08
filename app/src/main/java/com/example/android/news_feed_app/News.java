@@ -2,19 +2,23 @@ package com.example.android.news_feed_app;
 
 public class News {
     private String mArticleName;
+    private String mArticleSection;
     private String mPublishDate;
     private String mArticleUri;
-    private String mAuthorName;
 
-    public News(String articleName, String publishDate, String articleUri, String authorName) {
+    public News(String articleName, String articleSection, String publishDate, String articleUri) {
         mArticleName = articleName;
+        mArticleSection = articleSection;
         mPublishDate = publishDate;
         mArticleUri = articleUri;
-        mAuthorName = authorName;
     }
 
     public String getArticleName() {
         return mArticleName;
+    }
+
+    public String getArticleSection() {
+        return mArticleSection;
     }
 
     public String getPublishDate() {
@@ -25,7 +29,4 @@ public class News {
         return mArticleUri;
     }
 
-    public String getAuthorName() {
-        return mAuthorName;
-    }
 }
