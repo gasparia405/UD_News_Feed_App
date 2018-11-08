@@ -1,5 +1,6 @@
 package com.example.android.news_feed_app;
 
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.ListView;
@@ -8,22 +9,39 @@ import java.util.ArrayList;
 
 public class NewsActivity extends AppCompatActivity {
 
+    private NewsAdapter mAdapter;
+
+    private static final String GUARDIAN_API = "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_list);
 
-        final ArrayList<News> news = new ArrayList<>();
-        news.add(new News("Red Sox win Pennant","Sports", "Oct 04, 2018", "" ));
-        news.add(new News("White Sox win Pennant","Sports", "Oct 04, 2017", "" ));
-        news.add(new News("Cubs win Pennant","Sports", "Oct 04, 2016", "" ));
-        news.add(new News("Indians Sox win Pennant","Sports", "Oct 04, 2015", "" ));
-        news.add(new News("Brewers win Pennant","Sports", "Oct 04, 2014", "" ));
-
         ListView listView = findViewById(R.id.list_view);
 
-        NewsAdapter newsAdapter = new NewsAdapter(this, news);
+        mAdapter = new NewsAdapter(this, new ArrayList<News>());
 
-        listView.setAdapter(newsAdapter);
+        listView.setAdapter(mAdapter);
+
+        ArticleAsyncTask task = new ArticleAsyncTask();
+        task.execute(GUARDIAN_API);
+    }
+
+    private class ArticleAsyncTask extends AsyncTask<String, Void, ArrayList<News>> {
+        @Override
+        protected ArrayList<News> doInBackground(String... urls) {
+            if (urls.length < 1 || urls[0] == null) return null;
+
+            ArrayList<News> result = QueryUtils.extractNewsArticles(urls[0]);
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<News> news) {
+            mAdapter.clear();
+
+            if (news != null && !news.isEmpty()){mAdapter.addAll(news);}
+        }
     }
 }

@@ -35,8 +35,7 @@ public final class QueryUtils {
 
             jsonResponse = makeHttpRequest(url);
 
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-
+            JSONObject jsonObject = new JSONObject(jsonResponse).getJSONObject("response");
             JSONArray results = jsonObject.getJSONArray("results");
 
             for (int i = 0; i < results.length(); i++) {
