@@ -26,7 +26,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<A
     private TextView mEmptyStateTextView;
     private ProgressBar mProgressBar;
 
-    private static final String GUARDIAN_API = "https://content.guardianapis.com/search?q=debate&tag=politics/politics&from-date=2014-01-01&api-key=test";
+    private static final String GUARDIAN_API = "https://content.guardianapis.com/search?q=debate%20AND%20economy&tag=politics/politics&from-date=2014-01-01&api-key=test";
 
     private static final int NEWS_LOADER_ID = 1;
 
@@ -53,6 +53,9 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<A
             }
         });
 
+        mEmptyStateTextView = findViewById(R.id.empty_state_view);
+        listView.setEmptyView(mEmptyStateTextView);
+
         ConnectivityManager cm = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnected();
@@ -66,6 +69,11 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<A
             // because this activity implements the LoaderCallbacks interface).
             loaderManager.initLoader(NEWS_LOADER_ID, null,  this);
 
+        } else {
+            mProgressBar = findViewById(R.id.progress_circular);
+            mProgressBar.setVisibility(View.GONE);
+            mEmptyStateTextView.setText(R.string.no_internet_connection);
+
         }
     }
 
@@ -77,10 +85,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<A
 
     @Override
     public void onLoadFinished(@NonNull Loader<ArrayList<News>> loader, ArrayList<News> news) {
-//        mProgressBar = findViewById(R.id.progress_circular);
-//        mProgressBar.setVisibility(View.GONE);
-//
-//        mEmptyStateTextView.setText(R.string.no_earthquakes);
+        mProgressBar = findViewById(R.id.progress_circular);
+        mProgressBar.setVisibility(View.GONE);
+
+        mEmptyStateTextView.setText(R.string.no_articles);
 
         mAdapter.clear();
 
