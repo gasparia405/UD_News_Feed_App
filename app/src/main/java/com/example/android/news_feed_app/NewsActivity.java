@@ -1,8 +1,12 @@
 package com.example.android.news_feed_app;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -23,6 +27,18 @@ public class NewsActivity extends AppCompatActivity {
         mAdapter = new NewsAdapter(this, new ArrayList<News>());
 
         listView.setAdapter(mAdapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                News currentNewsArticle = mAdapter.getItem(position);
+
+                Uri newsArticleUri = Uri.parse(currentNewsArticle.getArticleUri());
+
+                Intent webPageIntent = new Intent(Intent.ACTION_VIEW, newsArticleUri);
+                startActivity(webPageIntent);
+            }
+        });
 
         ArticleAsyncTask task = new ArticleAsyncTask();
         task.execute(GUARDIAN_API);
