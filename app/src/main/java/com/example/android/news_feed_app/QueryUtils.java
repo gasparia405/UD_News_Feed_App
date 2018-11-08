@@ -41,12 +41,35 @@ public final class QueryUtils {
             for (int i = 0; i < results.length(); i++) {
                 JSONObject currentNewsArticle = results.getJSONObject(i);
 
+                JSONArray tags = currentNewsArticle.getJSONArray("tags");
+
+                ArrayList<String> authors = new ArrayList<>();
+                for (int j = 0; j < tags.length(); j++) {
+                    JSONObject tagsObject = tags.getJSONObject(j);
+
+                    authors.add(tagsObject.getString("webTitle"));
+                }
+
+                String contributors;
+                int numContributors = authors.size();
+
+                if (authors.size() > 1) {
+                    contributors = authors.get(0);
+                    for (int j = 1; j < authors.size(); j++) {
+                        contributors += " and " + authors.get(j);
+                    }
+                } else if (authors.size() == 1) {
+                    contributors = authors.get(0);
+                } else {
+                    contributors = "No Authors listed for this article.";
+                }
+
                 String articleTitle = currentNewsArticle.getString("webTitle");
                 String articleSection = currentNewsArticle.getString("sectionName");
                 String publishDate = currentNewsArticle.getString("webPublicationDate");
                 String articleUri = currentNewsArticle.getString("webUrl");
 
-                newsArticles.add(new News(articleTitle, articleSection, publishDate, articleUri));
+                newsArticles.add(new News(articleTitle, articleSection, contributors, publishDate, articleUri));
 
             }
 

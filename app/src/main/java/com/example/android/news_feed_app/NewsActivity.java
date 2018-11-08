@@ -26,7 +26,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderCallbacks<A
     private TextView mEmptyStateTextView;
     private ProgressBar mProgressBar;
 
-    private static final String GUARDIAN_API = "https://content.guardianapis.com/search?q=debate%20AND%20economy&tag=politics/politics&from-date=2014-01-01&api-key=test";
+    private static final String GUARDIAN_API = "http://content.guardianapis.com/search?q=debates&section=politics&show-tags=contributor&api-key=test";
 
     private static final int NEWS_LOADER_ID = 1;
 
